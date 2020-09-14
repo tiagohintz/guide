@@ -657,7 +657,7 @@ keytool -genkey -alias your-app-name -keyalg RSA -keysize 2048 -validity 10000
 Optionally, you can specify `--keystore` to use a different keystore. Don't forget to specify the same keystore when signing the APK.
 > Note: Ensure that you have secure backups of your keystore (`~/.keystore` is the default). If you publish an app to the Play Store and then lose the key with which you signed your app, you will not be able to publish any updates to your app, since you must always sign all versions of your app with the same key.
 
-Now, you can sign the APK:
+Now, you can sign the APK for target SDK 29 (Android 10) or minor:
 ```sh
 cd ~/build-output-directory/android/
 jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 release-unsigned.apk your-app-name
@@ -665,6 +665,12 @@ jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 release-unsigned.apk your
 Next, you can run zipalign on it to optimize the APK:
 ```sh
 $ANDROID_HOME/build-tools/<build-tools-version>/zipalign 4 release-unsigned.apk <your-app-name>.apk
+```
+
+Or, you can sign the APK for target SDK 30 (Android 10.0+ | 11):
+```sh
+cd ~/build-output-directory/android/
+$ANDROID_HOME/build-tools/<build-tools-version>/apksigner sign --ks <user-keystore-file> --ks-key-alias <your-app-name> --out <your-app-name>.apk  app-release-unsigned.apk
 ```
 
 From this point on, the process for submitting the app to the Play Store is the same as it would be for any other Android app. `<your-app-name>.apk` is the APK to upload to the store. Learn more by visiting https://play.google.com/apps/publish.
